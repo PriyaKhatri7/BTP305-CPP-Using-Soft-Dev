@@ -1,0 +1,27 @@
+Why do you need to deallocate the dynamically allocated memory in your vector?
+In the vector class usually all the objects inside will be destroyed but since the vector class has a * then all the objects much be explicitly deleted.
+If it's a std::vector - if you declare a variable it will be allocated on stack, local to the current block you're in, and be destructed when that block ends. But since we used pointers, the memory will be automatically freed before the scope ends. In this case with m_vehicles, nothing will happen unless we explicitly delete it which is why we need a desctructor in the Autoshop class.
+
+When building an object from the input file, different things can go wrong: the record represents an unknown type of vehicle, or record contains invalid data. How can the function loadData() detect what went wrong? Can you think at another solution than the one you have implemented?
+
+In this workshop you had to use std::list<sdds::Vehicle*> and std::vector<sdds::Vehicle*> to store a collection of vehicles as pointers. Could you have used std::list<sdds::Vehicle> and std::vector<sdds::Vehicle> instead? Justify your answer!
+
+It depends. std::vector and std::list and aClass all have 1 thing in common - if you declare a variable to be any of those types, then it will be allocated on stack, be local to the current block you're in, and be destructed when that block ends.
+
+E.g.
+
+{
+    std::vector<std::string> a;
+    std::string b;
+    MyClass c;
+} 
+At this point, first c will be destroyed, then b, then all strings in a, then a. So the order for list and vector matters!
+
+
+
+Things I had trouble with and how I fixed it.
+1. I was having errors coming from my main at line 78 and 100 for select function. At the time of coding it in I read the instructions as it's not a template class so I got things mixed up and instead put my template and select function outside the class, therefore in main it wasn't recognizing it. I thought for a long time that there is something wrong with my lambada expressions.
+
+2. I also was doing the first part in main incorrectly first because I was checking if doesn't match the records then it will return an error to the user, however, that isn't how to use catch. In the parameters list where we use string it will match the parameter to the function in cars.cpp constructor and return the error that it's supposed to. 
+
+Similar to the const char in w6_p2.cpp/line 41 it will go to the condition function in utilities and if it doesn't match the conditions then it will give the user the error.
