@@ -1,0 +1,2 @@
+I am getting an error that all my variables are undefined for when i try to use it in my operator<<. It looks like it wasn't getting the accessibility from it because I forgot to include the std:: and the library.
+
