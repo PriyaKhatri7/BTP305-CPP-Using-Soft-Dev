@@ -1,0 +1,439 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC
+    '-//W3C//DTD XHTML 1.0 Transitional//EN'
+    'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html lang="en-us" xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+    <title>OO Software Development Using C++11 | ICT - Seneca</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' />
+
+    <meta name="Copyright" content="(c) Copyright Seneca College 2014" />
+    <meta name="Description" content="Welcome to the OOP345 Web Site.  On this site you can find an intermediate course on object-oriented programming in C++.  Designed by Chris Szalwinski." />
+    <meta name="Abstract" content="This subject expands on introductory elements of C++ and covers intermediate C features.  The emphasis throughout is to prepare for the solution of large problems."/>
+    <meta name="Author" content="chris.szalwinski@senecac.on.ca"/>
+    <meta name="Keywords" content="software development, object-oriented programming, lecture notes"/>
+
+    <link rel="stylesheet" type="text/css" href="../style.043.css">
+    <link rel="stylesheet" type="text/css" href="../styleSPrint.043.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="../stylePPrint.043.css" media="print">
+</head>
+
+<body>
+ <table cellspacing="0" cellpadding="0" summary="banner"><!-- Body Cell -->
+  <tr class="content"><!-- Content Area -->
+   <td class="tbody">
+    <table cellpadding="10" width="100%" summary="content">
+     <tr>
+      <td class="content" valign="top">
+       <br />
+
+       <div class="center">
+        <span class="texth">Part F - Memory Model</span>
+        <br />
+        <br />
+        <span class="texthead">Smart Pointers</span>
+        <br />
+        <br />
+        <span class="textagend">Workshop 8</span>
+       </div>
+       <br />
+       <br />
+
+       <p>In this workshop, you merge two lists and use a smart pointer to ensure
+       that memory is deallocated in the possible handling of an exception.</p>
+       <br />
+
+       <p class="section">Learning Outcomes</p>
+
+       <p>Upon successful completion of this workshop, you will have demonstrated
+       the abilities to</p>
+
+       <ul>
+        <li>create a program component of quadratic complexity</li>
+        <li>use a smart pointer to move an object</li>
+        <li>reflect on the topics learned in this workshop</li>
+       </ul>
+       <br />
+
+       <p class="section">Specifications</p>
+
+       <p>
+       This workshop merges a description list with a price list to create a
+       user-friendly price list.&nbsp; The workshop is in two parts:
+       </p>
+       <ol>
+       <li>Merging Data Sets</li>
+       <li>Smart Pointers</li>
+       </ol>
+
+       <p class="ssection">Files Provided</p>
+
+       <p>
+       The three source files for this workshop are listed below
+       </p>
+       <ul>
+        <li><span class="code">Element.h</span> (first version complete)</li>
+        <li><span class="code">List.h</span> (first version complete)</li>
+        <li><span class="code">w9.cpp</span> (incomplete)</li>
+       </ul>
+
+       <p>
+       The data files are at
+       </p>
+       <ul>
+        <li><span class="code"><a href="Prices.dat.html">Prices.dat</a></span></li>
+        <li><span class="code"><a href="Descriptions.dat.html">Descriptions.dat</a></span></li>
+        <li><span class="code"><a href="BadPrices.dat.html">BadPrices.dat</a></span></li>
+       </ul>
+
+       <p class="sssection">Element Classes</p>
+
+       <p>
+       The <span class=code>Description</span> class holds a product code and a user-friendly
+       description.&nbsp; The <span class=code>Price</span> class holds a product code and the
+       current price.&nbsp; The <span class=code>Product</span> class holds a user-friendly
+       description and the current price of a product.&nbsp;
+       </p>
+
+       <p class="sssection">Element Classes</p>
+
+       <p>
+       The <span class=code>Description</span>, <span class=code>Price</span> and
+       <span class=code>Product</span> classes hold elemental information for the
+       different lists.&nbsp;
+       </p>
+
+       <table width="45%" summary="">
+        <tr>
+         <td>
+          <pre>
+ // Workshop 9 - Smart Pointers
+ // Element.h
+
+ #include &lt;iostream&gt;
+ #include &lt;iomanip&gt;
+ #include &lt;string&gt;
+ #include &lt;fstream&gt;
+
+ extern const int FWC;
+ extern const int FWD;
+ extern const int FWP;
+
+ namespace w9 {
+
+     struct Description {
+         unsigned code;
+         std::string desc;
+         bool load(std::ifstream& f) {
+             f &gt;&gt; code &gt;&gt; desc;
+             return f.good();
+         }
+         void display(std::ostream& os) const {
+             os &lt;&lt; std::setw(FWC) &lt;&lt; code &lt;&lt; std::setw(FWD)
+                &lt;&lt; desc &lt;&lt; std::endl;
+         }
+     };
+
+     struct Price {
+         unsigned code;
+         double price;
+         bool load(std::ifstream& f) {
+             f &gt;&gt; code &gt;&gt; price;
+             return f.good();
+         }
+         void display(std::ostream& os) const {
+             os &lt;&lt; std::setw(FWC) &lt;&lt; code &lt;&lt; std::setw(FWP)
+                &lt;&lt; price &lt;&lt; std::endl;
+         }
+     };
+
+     struct Product {
+         std::string desc;
+         double price;
+         Product() {}
+         Product(const std::string& str, double p) : desc(str), price(p) {}&nbsp;
+         void display(std::ostream& os) const {
+             os &lt;&lt; std::setw(FWD) &lt;&lt; desc &lt;&lt; std::setw(FWP)
+                &lt;&lt; price &lt;&lt; std::endl;
+         }
+     };
+ }
+</pre>
+         </td>
+        </tr>
+       </table>
+
+       <p class="sssection">List Template</p>
+
+       <p>
+       The <span class=code>List</span> template defines a class that retrieves a list of types
+       stored in a text file, holds the elements in an STL vector, provides access to them by
+       index and displays them to an output stream.&nbsp;
+       </p>
+
+       <table width="45%" summary="">
+        <tr>
+         <td>
+          <pre>
+ // Workshop 9 - Smart Pointers
+ // List.h
+
+ #include &lt;iostream&gt;
+ #include &lt;iomanip&gt;
+ #include &lt;vector&gt;
+ #include &lt;string&gt;
+ #include &lt;fstream&gt;
+
+ namespace w9 {
+     template &lt;typename T&gt;
+     class List {
+         std::vector&lt;T&gt; list;
+       public:
+         List() { }
+         List(const char* fn) {
+             std::ifstream file(fn);
+             if (!file)
+                 throw std::string("*** Failed to open file ") +
+                  std::string(fn) + std::string(" ***");
+             while (file) {
+                 T e;
+                 if (e.load(file))
+                     list.push_back(*new T(e));
+             }
+         }
+         size_t size() const { return list.size(); }
+         const T& operator[](size_t i) const { return list[i]; }
+         void operator+=(T* p) {
+             list.push_back(*p);
+         }
+         void display(std::ostream& os) const {
+             os &lt;&lt; std::fixed &lt;&lt; std::setprecision(2);
+             for (auto& e : list)
+                 e.display(os);
+         }
+     };
+
+     template&lt;typename T&gt;
+     std::ostream& operator&lt;&lt;(std::ostream& os, const List&lt;T&gt;& l) {
+         l.display(os);
+         return os;
+     }
+ }
+</pre>
+         </td>
+        </tr>
+       </table>
+
+       <p class="ssection">Part 1 - Merging Data Sets</p>
+
+       <p>
+       The <span class=code>main()</span> program that uses the <span class=code>Element</span>
+       classes and the <span class=code>List</span> template is shown below.&nbsp; Your first
+       task is to complete the coding of the <span class=code>merge()</span> function.&nbsp;
+       </p>
+
+       <p class="sssection">merge Function</p>
+
+       <p>
+       This function returns the user-friendly price list.&nbsp; Each element in that list is
+       of <span class=code>Product</span> type.&nbsp; Your function compares elements in the
+       two received lists for common product codes and builds the user-friendly list from the
+       matching pairs.&nbsp; Your function allocates dynamic memory for each user-friendly
+       element and adds that element to the new list by passing the object's raw pointer to
+       the list's <span class=code>+=</span> operator.&nbsp; For this part of the workshop
+       do not change any code in the header files provided.&nbsp;
+       </p>
+
+       <table width="45%" summary="">
+        <tr>
+         <td>
+          <pre>
+ // Workshop 9 - Smart Pointers
+ // w9.cpp
+
+ #include &lt;iostream&gt;
+ #include &lt;iomanip&gt;
+ #include "Element.h"
+ #include "List.h"
+
+ const int FWC =  5;
+ const int FWD = 12;
+ const int FWP =  8;
+
+ w9::List&lt;w9::Product&gt; merge(const w9::List&lt;w9::Description&gt;& desc,&nbsp;
+  const w9::List&lt;w9::Price&gt;& price) {
+     w9::List&lt;w9::Product&gt; priceList;
+
+
+
+     <span class=high>// complete this part</span>
+
+
+
+
+     return priceList;
+ }
+
+ int main(int argc, char** argv) {
+     std::cout &lt;&lt; "\nCommand Line : ";
+     for (int i = 0; i &lt; argc; i++) {
+         std::cout &lt;&lt; argv[i] &lt;&lt; ' ';
+     }
+     std::cout &lt;&lt; std::endl;
+     if (argc != 3) {
+         std::cerr &lt;&lt; "\n***Incorrect number of arguments***\n";
+         return 1;
+     }
+
+     try {
+         w9::List&lt;w9::Description&gt; desc(argv[1]);
+         std::cout &lt;&lt; std::endl;
+         std::cout &lt;&lt; std::setw(FWC) &lt;&lt; "Code" &lt;&lt;
+          std::setw(FWD) &lt;&lt; "Description" &lt;&lt; std::endl;
+         std::cout &lt;&lt; desc &lt;&lt; std::endl;
+         w9::List&lt;w9::Price&gt; price(argv[2]);
+         std::cout &lt;&lt; std::endl;
+         std::cout &lt;&lt; std::setw(FWC) &lt;&lt; "Code" &lt;&lt;
+          std::setw(FWP) &lt;&lt; "Price" &lt;&lt; std::endl;
+         std::cout &lt;&lt; price &lt;&lt; std::endl;
+         w9::List&lt;w9::Product&gt; priceList = merge(desc, price);
+         std::cout &lt;&lt; std::endl;
+         std::cout &lt;&lt; std::setw(FWD) &lt;&lt; "Description" &lt;&lt;
+          std::setw(FWP) &lt;&lt; "Price" &lt;&lt; std::endl;
+         std::cout &lt;&lt; priceList &lt;&lt; std::endl;
+     }
+     catch (const std::string& msg) {
+         std::cerr &lt;&lt; msg &lt;&lt; std::endl;
+     }
+     catch (const char* msg) {
+         std::cerr &lt;&lt; msg &lt;&lt; std::endl;
+     }
+
+     std::cout &lt;&lt; "\nPress any key to continue ... ";
+     std::cin.get();
+}</pre>
+         </td>
+        </tr>
+       </table>
+       <p>
+       </p>
+
+       <p class="sssection">Output</p>
+
+       <p>
+       The output from a completed version of this program should look like:
+       </p>
+
+       <table width="45%" summary="">
+        <tr>
+         <td>
+          <pre class=result>
+
+ Command Line : w9 Descriptions.dat Prices.dat&nbsp;
+
+  Code Description
+  4662    tomatoes
+  4039   cucumbers
+  4056    brocolli
+  4067      lemons
+  4068     oranges
+
+
+  Code   Price
+  4067    0.99
+  4068    0.67
+  4039    1.99
+  4056    2.49
+
+
+  Description   Price
+    cucumbers    1.99
+     brocolli    2.49
+       lemons    0.99
+      oranges    0.67
+
+
+ Press any key to continue ...</pre>
+         </td>
+        </tr>
+       </table>
+
+       <p class="ssection">Part 2 - Smart Pointers</p>
+
+       <p>
+       Your second task is to introduce exception handling in the <span class=code>Product</span>
+       class.&nbsp;
+       </p>
+
+       <p class="sssection">Validate Price</p>
+
+       <p>
+       Upgrade the <span class=code>Product</span> class to include a <span class=code>validate()</span>
+       member function.&nbsp; This function throws an exception if the stored price is a negative
+       value.&nbsp; The message thrown is shown in the output sample below.&nbsp;
+       The exception is caught by the <span class=code>main()</span> function.&nbsp;
+       </p>
+       <p>
+       Finally, upgrade your <span class=code>merge()</span> function to validate the product
+       being added to the new list.&nbsp; If the <span class=code>Product</span> object throws
+       an exception, your <span class=code>merge()</span> function abandons building its new
+       list and does not catch the exception.&nbsp;
+       </p>
+       <p>
+       To avoid memory leaks convert the raw pointer in your <span class=code>merge()</span>
+       function to a unique smart pointer.&nbsp; Also, convert the raw pointer parameter in the
+       <span class=code>+=</span> operator in the <span class=code>List</span> template to match.&nbsp;
+       </p>
+
+       <p class="sssection">Output</p>
+
+       <p>
+       The output from a completed version of this program should look like:
+       </p>
+
+       <table width="45%" summary="">
+        <tr>
+         <td>
+          <pre class=result>
+
+ Command Line : w9 Descriptions.dat BadPrices.dat&nbsp;
+
+  Code Description
+  4662    tomatoes
+  4039   cucumbers
+  4056    brocolli
+  4067      lemons
+  4068     oranges
+
+
+  Code   Price
+  4067    0.99
+  4068    0.67
+  4039    1.99
+  4056   <span class=high>-2.49</span>
+
+ <span class=high>*** Negative prices are invalid ***</span>
+
+ Press any key to continue ...</pre>
+         </td>
+        </tr>
+       </table>
+
+       <br />
+
+       <p class="section">Submission</p>
+
+       <p>Follow your professor's submission instructions</p>
+       <br />
+       <br />
+       <br />
+      </td>
+     </tr>
+    </table>
+   </td>
+  </tr>
+ </table>
+</body>
+</html>

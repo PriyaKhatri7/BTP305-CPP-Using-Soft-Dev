@@ -1,0 +1,291 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC
+    '-//W3C//DTD XHTML 1.0 Transitional//EN'
+    'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html lang="en-us" xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+    <title>OO Software Development Using C++11 | ICT - Seneca</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' />
+
+    <meta name="Copyright" content="(c) Copyright Seneca College 2014" />
+    <meta name="Description" content="Welcome to the OOP345 Web Site.  On this site you can find an intermediate course on object-oriented programming in C++.  Designed by Chris Szalwinski." />
+    <meta name="Abstract" content="This subject expands on introductory elements of C++ and covers intermediate C features.  The emphasis throughout is to prepare for the solution of large problems."/>
+    <meta name="Author" content="chris.szalwinski@senecac.on.ca"/>
+    <meta name="Keywords" content="software development, object-oriented programming, lecture notes"/>
+
+    <link rel="stylesheet" type="text/css" href="../style.043.css">
+    <link rel="stylesheet" type="text/css" href="../styleSPrint.043.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="../stylePPrint.043.css" media="print">
+</head>
+
+<body>
+ <table cellspacing="0" cellpadding="0" summary="banner"><!-- Body Cell -->
+  <tr class="content"><!-- Content Area -->
+   <td class="tbody">
+    <table cellpadding="10" width="100%" summary="content">
+     <tr>
+      <td class="content" valign="top">
+       <br />
+
+       <div class="center">
+        <span class="texth">Part C - Class Relationships</span>
+        <br />
+        <br />
+        <span class="texthead">Containers</span>
+        <br />
+        <br />
+        <span class="textagend">Workshop 4</span>
+       </div>
+       <br />
+       <br />
+
+       <p>In this workshop, you code a container that holds notifications
+       and a class that holds each message in a notifications object.</p>
+       <br />
+
+       <p class="section">Learning Outcomes</p>
+
+       <p>Upon successful completion of this workshop, you will have demonstrated
+       the abilities to</p>
+
+       <ul>
+        <li>design and code a composition of objects</li>
+        <li>read records from a file into a <span class=code>string</span> object</li>
+        <li>parse a string object into components based on a simple set of rules</li>
+        <li>reflect on the material learned in this workshop</li>
+       </ul>
+       <br />
+
+       <p class="section">Specifications</p>
+
+       <p class="ssection">Overview</p>
+
+       <p>
+       This workshop retrieves messages from a data file and collects
+       them in a notification.&nbsp; Each record in the data file contains a single
+       message and ends with a pre-defined delimiting character.&nbsp;
+       </p>
+
+       <p>
+       The <a href="messages.dat">test data file</a> contains:
+       </p>
+       <table width="45%" summary="">
+        <tr>
+         <td>
+          <pre>
+ jim Workshop 5 is cool
+ harry @jim working on workshop 5 now&nbsp;
+ chris
+ dave what the ^#$%!
+ john @harry I'm done</pre>
+         </td>
+        </tr>
+       </table>
+       <p>
+       The first message consists of a user name followed by a tweet.&nbsp; The second
+       message consists of a user name, a reply name prefaced by an <span class=code>@</span>,
+       and followed by a tweet.&nbsp; Your solution ignores incomplete messages, such as the
+       third message here.
+       </p>
+
+       <p class="ssection">Solution</p>
+
+       <p>
+       Your complete solution to this workshop consists of three modules:
+       </p>
+       <ul>
+       <li><span class=code>w4</span> - the client application that collects and displays
+       notifications</li>
+       <li><span class=code>Notifications</span> - the module that holds and manages the messages</li>
+       <li><span class=code>Message</span> - the module that manages the retrieval of a single
+       message from a file and displays the message</li>
+       </ul>
+
+       <p>
+       The classes for this workshop are defined in the <span class=code>sict</span> namespace.&nbsp;
+       </p>
+
+       <p class="sssection">Application</p>
+
+       <p>
+       The source file that uses your two classes is:
+       </p>
+
+       <table width="45%" summary="">
+        <tr>
+         <td>
+          <pre>
+ // Workshop 4 - Containers
+ // w4.cpp
+ // Chris Szalwinski
+ // 2018-05-21
+
+ #include &lt;iostream&gt;
+ #include &lt;fstream&gt;
+ #include "Notifications.h"
+
+ char recordDelimiter{ '\n' };
+
+ int main(int argc, char* argv[]) {
+     std::cout &lt;&lt; "Command Line : ";
+     for (int i = 0; i &lt; argc; i++) {
+         std::cout &lt;&lt; argv[i] &lt;&lt; ' ';
+     }
+     std::cout &lt;&lt; std::endl;
+
+     if (argc == 1) {
+         std::cerr &lt;&lt; "\n*** Insufficient number of arguments ***\n";
+         std::cerr &lt;&lt; "Usage: " &lt;&lt; argv[0] &lt;&lt; " fileName \n";
+         return 1;
+     }
+     else if (argc != 2) {
+         std::cerr &lt;&lt; "\n*** Too many arguments ***\n";
+         std::cerr &lt;&lt; "Usage: " &lt;&lt; argv[0] &lt;&lt; " fileName \n";
+         return 2;
+     }
+     std::ifstream input(argv[1]);
+     if (!input) {
+         std::cerr &lt;&lt; "*** Failed to open file " &lt;&lt; argv[1] &lt;&lt; " successfully ***\n";
+         return 3;
+     }
+
+     std::cout &lt;&lt; "\nNotifications\n=============\n\n";
+     sict::Notifications notifications = std::move(sict::Notifications(input));
+
+     notifications.display(std::cout);
+ }</pre>
+         </td>
+        </tr>
+       </table>
+       <p>
+       </p>
+
+       <p class="sssection">Notifications Module</p>
+
+       <p>
+       A <span class="code">Notifications</span> object can access a set of up to 10
+       <span class="code">Message</span> objects.&nbsp; The <span class=code>Notifications</span>
+       object upon construction collects the addresses of <span class="code">Message</span> objects
+       from a file and destroys the objects once the <span class=code>Notifications</span> object goes
+       out of scope.&nbsp;
+       </p>
+       <p>
+       Your design of the <span class=code>Notifications</span> class includes the following member functions:
+       </p>
+       <ul>
+        <li><span class="code">Notifications(std::ifstream&)</span> - constructor</li>
+        <li><span class="code">Notifications(Notifications&&)</span> - move constructor</li>
+        <li><span class="code">Notifications& operator=(Notifications&&)</span> - move assignment operator</li>
+        <li><span class="code">~Notifications()</span> - destructor</li>
+        <li><span class="code">void display(std::ostream& os) const</span> - inserts the <span class=code>Message</span>
+        objects to the <span class=code>os</span> output stream</li>
+        <li>both the copy constructor and copy assingment operator are deleted</li>
+       </ul>
+
+       <p>
+       Store the code for your <span class=code>Notifications</span> module in two source files:
+       </p>
+       <ul>
+        <li><span class="code">Notifications.h</span> - defines the <span class=code>Notifications</span> class</li>
+        <li><span class="code">Notifications.cpp</span> - implements the member functions for the
+        <span class=code>Notifications</span> class</li>
+       </ul>
+
+       <p class="sssection">Message Module</p>
+
+       <p>
+       A <span class="code">Message</span> object holds either nothing or a single message.&nbsp;
+       The object retireves the message from an <span class="code">std::ifstream</span> object.&nbsp;
+       A <span class="code">Message</span> that holds nothing is in a safe empty state.&nbsp;
+       </p>
+
+       <p>
+       Your design of the <span class=code>Message</span> class includes the following member functions:
+       </p>
+       <ul>
+        <li><span class="code">Message(std::ifstream& in, char c)</span> - constructor retrieves a record from
+        the <span class=code>in</span> file object, parses the record (as described above) and stores its components
+        in the <span class=code>Message</span> object.&nbsp;
+        <span class=code>c</span> is the character that delimits each record</li>
+        <li><span class="code">void display(std::ostream&) const</span> - displays the <span class=code>Message</span>
+        objects within the container</li>
+       </ul>
+       <p>
+       Store the code for your <span class=code>Message</span> module in two source files:
+       </p>
+       <ul>
+       <li><span class=code>Message.h</span> - defines the <span class=code>Message</span> class</li>
+       <li><span class=code>Message.cpp</span> - implements the member functions for the class.</li>
+       </ul>
+
+       <p class="ssection">Results</p>
+
+       <p>
+       The results generated by the application using your solution and the <a href="messages.dat">test data file</a>
+       are listed below:
+       </p>
+       <table width="45%" summary="">
+        <tr>
+         <td>
+          <pre class=result>
+ Notifications
+ =============
+
+ Message
+  User  : jim
+  Tweet : Workshop 5 is cool
+
+ Message
+  User  : harry
+  Reply : jim
+  Tweet : working on workshop 5 now
+
+
+ Message
+  User  : dave
+  Tweet : what the ^#$%!
+
+ Message
+  User  : john
+  Reply : harry
+  Tweet : I'm done
+
+
+ Press any key to continue ...</pre>
+         </td>
+        </tr>
+       </table>
+       <br />
+
+       <p class="section">Submission</p>
+
+       <p>Follow your professor's submission instructions.&nbsp;
+       </p>
+       <p>
+       Unless otherwise stated by your instructor, your submission
+       should include the following components:
+       </p>
+       <ol>
+       <li>source code for your <span class=code>Notifications</span> module</li>
+       <li>source code for your <span class=code>Messages</span> modules</li>
+       <li>a text file named <span class=code>reflect.txt</span> that
+       includes:
+       <ul>
+       <li>identification of the Notifications class as a composition, aggregation or association</li>
+       <li>the corrected answers to the latest quiz that you received</li>
+       <li>a description of what you learned in completing this workshop</li>
+       </ul>
+       </ol>
+       <br />
+       <br />
+       <br />
+      </td>
+     </tr>
+    </table>
+   </td>
+  </tr>
+ </table>
+</body>
+</html>

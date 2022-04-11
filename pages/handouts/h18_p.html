@@ -1,0 +1,131 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC
+    '-//W3C//DTD XHTML 1.0 Transitional//EN'
+    'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html lang="en-us" xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+    <title>OO Software Development Using C++11 | ICT - Seneca</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' />
+
+    <meta name="Copyright" content="(c) Copyright Seneca College and Chris Szalwinski 2014" />
+    <meta name="Description" content="Welcome to the OOP345 Web Site.  On this site you can find an intermediate course on object-oriented programming in C++.  Designed by Chris Szalwinski." />
+    <meta name="Abstract" content="This subject expands on introductory elements of C++ and covers intermediate C features.  The emphasis throughout is to prepare for the solution of large problems."/>
+    <meta name="Author" content="chris.szalwinski@senecacollege.ca"/>
+    <meta name="Keywords" content="software development, object-oriented programming, lecture notes"/>
+
+    <link rel="stylesheet" type="text/css" href="../style.043.css">
+    <link rel="stylesheet" type="text/css" href="../styleSPrint.043.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="../stylePPrint.043.css" media="print">
+</head>
+
+<body>
+
+<table cellspacing="0" cellpadding="0" summary="">
+
+    <!-- Body Cell -->
+    <tr class="content">
+        <!-- Content Area -->
+        <td class="tbody" bgcolor="ffffff">
+    <table cellpadding="10" width="100%" summary="">
+     <tr>
+      <td class="content" valign="top">
+       <br />
+
+       <div class="center">
+        <span class="texth">In-Class Practice</span>
+        <br />
+        <br />
+        <span class="texthead">Templates</span>
+       </div>
+       <br />
+       <br />
+       <br />
+
+       <p>What is the output of the following program:</p>
+
+       <table width="45%" summary="">
+        <tr>
+         <td>
+          <br />
+          <pre>
+ #include &lt;iostream&gt;
+ #include &lt;iomanip&gt;
+ using namespace std;
+
+ template &lt;class T, int n = 1, int start = 0&gt;
+ class A {
+     T t[n];
+     T junk;
+   public:
+     A() {
+         for (int i = 0; i &lt; n; i++)
+             t[i] = i + start;
+         if (n &gt; 0) junk = t[0];
+     }
+     T&amp; operator[](int i) {
+         return i &lt; 0 || i &gt;= n ? junk : t[i];
+     }
+     T operator[](int i) const {
+         return i &lt; 0 || i &gt;= n ? junk : t[i] + 1;
+     }
+     void display(int i) const {
+         cout &lt;&lt; setw(2) &lt;&lt; operator[](i);
+     }
+ };
+
+ int main () {
+     A&lt;int, 6&gt; a;
+     A&lt;char, 4, 'F'&gt; b;
+
+     a[2] = 8;
+     b[3] = 'A';
+     for (int i = 0; i &lt; 5; i++) {
+         a.display(i);
+         cout &lt;&lt; '|';
+         b.display(i);
+         cout &lt;&lt; endl;
+     }
+
+     return 0;
+  }
+</pre>
+          <br />
+         </td>
+        </tr>
+       </table>
+       <br />
+       <br />
+       <br />
+      </td>
+     </tr>
+    </table>
+        </td>
+    </tr>
+
+    <!-- Footer -->
+    <tr>
+        <td class="tbody">
+            <table cellpadding="1" width="90%" align="center">
+                <tr>
+                    <td width="50%" class="text3">
+                        <script language="javascript">
+                        var lh = document.location.href;
+                        document.write(lh)
+                        </script>&nbsp;&nbsp;
+                    </td>
+                    <td width="50%" align="right" class="text3">
+                        <script language="javascript">
+                        var lm = document.lastModified.slice(0,-3);
+                        document.write("Last Modified: " +lm)
+                        </script>&nbsp;&nbsp;
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,186 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC
+    '-//W3C//DTD XHTML 1.0 Transitional//EN'
+    'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html lang="en-us" xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+    <title>OO Software Development Using C++11 | ICT - Seneca</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' />
+
+    <meta name="Copyright" content="(c) Copyright Seneca College and Chris Szalwinski 2014" />
+    <meta name="Description" content="Welcome to the OOP345 Web Site.  On this site you can find an intermediate course on object-oriented programming in C++.  Designed by Chris Szalwinski." />
+    <meta name="Abstract" content="This subject expands on introductory elements of C++ and covers intermediate C features.  The emphasis throughout is to prepare for the solution of large problems."/>
+    <meta name="Author" content="chris.szalwinski@senecacollege.ca"/>
+    <meta name="Keywords" content="software development, object-oriented programming, lecture notes"/>
+
+    <link rel="stylesheet" type="text/css" href="../style.043.css">
+    <link rel="stylesheet" type="text/css" href="../styleSPrint.043.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="../stylePPrint.043.css" media="print">
+</head>
+
+<body>
+
+<table cellspacing="0" cellpadding="0" summary="">
+
+    <!-- Body Cell -->
+    <tr class="content">
+        <!-- Content Area -->
+        <td class="tbody" bgcolor="ffffff">
+    <table cellpadding="10" width="100%" summary="">
+     <tr>
+      <td class="content" valign="top">
+       <br />
+
+       <div class="center">
+        <span class="texth">In-Class Practice</span>
+        <br />
+        <br />
+        <span class="texthead">Abstract Base Classes</span>
+       </div>
+       <br />
+       <br />
+       <br />
+
+       <p>Complete the following program so that the program shown
+       below will generate the output shown on its right.&#160;</p>
+
+       <table width="45%" summary="">
+        <tr>
+         <td>
+          <br />
+          <pre>
+ #include &lt;iostream&gt;
+ #include &lt;cstring&gt;
+ using namespace std;
+
+ class IsDisplayable {
+   public:
+     virtual void display(ostream&amp; os) const = 0;
+ };
+
+ ostream&amp; operator&lt;&lt;(ostream&amp; os, const IsDisplayable&amp; d) {
+     d.display(os);
+     return os;
+ }
+
+ class Quote : public IsDisplayable {
+     char* text;
+   public:
+     Quote(const char* t = "") {
+         text = new char[strlen(t) + 1];
+         strcpy(text, t);
+     }
+     Quote(const Quote&amp; q) {
+         text = NULL;
+         *this = q;
+     }
+     Quote&amp; operator=(const Quote&amp; q) {
+         if (this != &amp;q) {
+             if (text) delete [] text;
+             text = new char[strlen(q.text) + 1];
+             strcpy(text, q.text);
+         }
+         return *this;
+     }
+     ~Quote() {
+         delete [] text;
+     }
+
+
+
+
+
+
+
+
+
+ };
+</pre>
+          <br />
+         </td>
+        </tr>
+       </table>
+
+       <p>The command line input to the following program is
+       <span class="code">quote "When will this be over?" "One more
+       week of torture!"</span></p>
+
+       <table width="95%" summary="">
+        <tr>
+         <td class="w60">
+          <br />
+          <pre>
+ #include &lt;iostream&gt;
+ using namespace std;
+ #include "Quote.h"
+ using namespace std;
+
+ int main(int argc, char* argv[]) {
+
+     for (int i = 1; i &lt; argc; i++) {
+         Quote quote(argv[i]);
+         cout &lt;&lt; quote &lt;&lt; endl;
+     }
+     return 0;
+ }
+</pre>
+          <br />
+         </td>
+
+         <td class="w40">
+          <br />
+          <pre class="result">
+
+
+
+
+
+ Today's quote is
+ "When will this be over?"
+
+ Today's quote is
+ "One more week of torture!"
+
+
+
+</pre>
+          <br />
+         </td>
+        </tr>
+       </table>
+       <br />
+       <br />
+       <br />
+      </td>
+     </tr>
+    </table>
+        </td>
+    </tr>
+
+    <!-- Footer -->
+    <tr>
+        <td class="tbody">
+            <table cellpadding="1" width="90%" align="center">
+                <tr>
+                    <td width="50%" class="text3">
+                        <script language="javascript">
+                        var lh = document.location.href;
+                        document.write(lh)
+                        </script>&nbsp;&nbsp;
+                    </td>
+                    <td width="50%" align="right" class="text3">
+                        <script language="javascript">
+                        var lm = document.lastModified.slice(0,-3);
+                        document.write("Last Modified: " +lm)
+                        </script>&nbsp;&nbsp;
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

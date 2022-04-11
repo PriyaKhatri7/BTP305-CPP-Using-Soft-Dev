@@ -1,0 +1,442 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN'
+'https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+
+<html lang="en-us" xmlns='https://www.w3.org/1999/xhtml' xml:lang=
+"en-us">
+<head>
+ <meta name="generator" content=
+ "HTML Tidy for Windows (vers 25 March 2009), see www.w3.org" />
+
+ <title>OO Software Development
+ Using C++11 | ICT - Seneca</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <meta http-equiv="PICS-Label" content=
+ '(PICS-1.1 "https://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "https://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "https://www.classify.org/safesurf/" l gen true r (SS~~000 1))' />
+ <meta name="Copyright" content="(c) Copyright Seneca College, Chris Szalwinski 2014" />
+ <meta name="Description" content=
+ "Welcome to the OOP345 Web Site.  On this site you can find a course on object-oriented programming using C++11.  Designed by Chris Szalwinski." />
+ <meta name="Abstract" content=
+ "This course continues the study of object-oriented programming introduced in OOP244." />
+ <meta name="Author" content="chris.szalwinski@senecac.on.ca" />
+ <meta name="Keywords" content=
+ "software development, object-oriented programming, lecture notes" />
+ <link rel="stylesheet" type="text/css" href="../style.043.css" />
+ <link rel="stylesheet" type="text/css" href="../styleScreen.043.css"
+ media="screen" />
+ <link rel="stylesheet" type="text/css" href="../styleSPrint.043.css"
+ media="print" />
+ <link rel="stylesheet" type="text/css" href="../styleNav.043.css" />
+ <style type="text/css">
+/*<![CDATA[*/
+ div.c1 {text-align: center}
+ /*]]>*/
+ </style>
+</head>
+
+<body>
+ <table id="top" width="850" cellspacing="0" cellpadding="0" summary=
+ "body">
+  <!-- Banner -->
+
+  <tr class="banner">
+   <td colspan="2" class="banner">
+    <table cellspacing="0" cellpadding="0" summary="banner">
+     <tr>
+      <td class="w250 banner">
+       <div class="center">
+        <span class="text0">&#160;&#160;Software&#160;&#160;
+        <br />
+        &#160;&#160;Development&#160;&#160;</span>
+       </div>
+      </td>
+
+      <td class="tbanner"><img src="../images/Banner4.gif" height="120"
+      width="500" alt="Software Development" /></td>
+     </tr>
+    </table>
+   </td>
+  </tr><!-- Navigation Bar -->
+
+  <tr class="navigate">
+   <td class="panel1" align="left" valign="bottom">
+    <ul id="tabnav">
+     <li><script type="text/javascript" src="../ict.js"></script></li>
+     <li><a href="../../index.html">Home</a></li>
+     <li><script type="text/javascript" src="../outline.js"></script></li>
+     <li><a href="../timeline.html">Timeline</a></li>
+     <li><a href="../content/index.html">Notes</a></li>
+     <li><script type="text/javascript" src="../classroom_a.js"></script></li>
+     <li><script type="text/javascript" src="../classroom_b.js"></script></li>
+     <li><a class="active" href="index.html">Workshops</a></li>
+     <li><a href="../assignments/index.html">Assignments</a></li>
+     <li><a href="../instructors/index.html">Instructor</a></li>
+     <li><a href="w1_p.html"><img src="../images/Printer.gif" height=
+     "15" width="10" alt="Printer Friendly Version of this Page" /></a></li>
+    </ul>
+   </td><!-- Web Site Title -->
+
+   <td class="panel2 w150 center"><span class="text1"><script type=
+   "text/javascript" src="../subject.js">
+</script></span></td>
+  </tr><!-- Body Cells -->
+
+  <tr class="content">
+   <!-- Content Area -->
+
+   <td class="tbody" valign="top">
+    <table cellpadding="10" width="100%" summary="content">
+     <tr>
+      <td class="content" valign="top">
+       <br />
+
+       <div class="center">
+        <span class="texth">Part A - Introduction</span>
+        <br />
+        <br />
+        <span class="texthead">Across Translation Units</span>
+        <br />
+        <br />
+        <span class="textagend">Workshop 1</span>
+       </div>
+       <br />
+       <br />
+
+       <p>In this workshop, you implement linkage, storage duration, namespaces,
+       guards, and operating system interfaces.</p>
+       <br />
+
+       <p class="section">Learning Outcome</p>
+
+       <p>Upon successful completion of this workshop, you will have
+       demonstrated the abilities to</p>
+
+       <ul>
+        <li>link to a variable in another translation unit</li>
+
+        <li>declare a local variable that lasts the lifetime of the program</li>
+
+        <li>guard a class definition from repetition</li>
+
+        <li>define a class within its own namespace</li>
+
+        <li>pass arguments to a program from the command line</li>
+
+        <li>describe to your instructor what you have learned in this workshop</li>
+       </ul>
+       <br />
+
+       <p class="section">Specifications</p>
+
+       <p>This workshop consists of three modules:</p>
+       <ul>
+       <li><span class=code>w1</span></li>
+       <li><span class=code>Process</span></li>
+       <li><span class=code>CString</span></li>
+       </ul>
+
+       <p class="ssection">CString Module</p>
+
+       <p>Code a class named <span class="code">CString</span> that
+       encapsulates a C-style null-terminated string.&nbsp; Include
+       separate header and implementation files for your module.&nbsp;
+       Wrap your header file in a conditional pre-processor macro that
+       prevents repeated access.&nbsp; Embed your class definition and
+       its implementation in namespace <span class=code>sict</span>.&nbsp;
+       In your header file, alongside your class definition, define an
+       unmodifiable variable named <span class=code>MAX_CHAR</span> that
+       holds the number of characters to be stored in a
+       <span class="code">CString</span> object excluding the null byte.&nbsp;
+       Set the value of that variable to <span class=code>14</span>.
+       </p>
+       <p>
+       Include in or with your class definition:
+       </p>
+
+       <ul>
+        <li>a constructor that receives optionally the address of an unmodifiable
+        C-style null-terminated string and stores up to the maximum number of
+        characters specified.&nbsp; Your constructor defaults to an empty
+        string and checks for receipt of the null address.&nbsp;
+        Yourr constructor stores an empty string if the address received is
+        the null address.</li>
+
+        <li>a member query named <span class=code>display()</span>that receives
+        a reference to an <span class="code">ostream</span> object and inserts into
+        that object the string stored in your <span class=code>CString</span> object.&nbsp;
+        </li>
+
+        <li>a non-friend helper operator that inserts the stored string into the left
+        <span class=code>ostream</span> operand of an insertion expression.&nbsp; This
+        operator prefaces the string with an insertion counter and increments that counter.&nbsp;
+        Before the very first string only, this operator inserts a one-line heading as
+        shown below.&nbsp; The initial value for the counter is set outside your
+        module.</li>
+       </ul>
+       <p>
+       Do not use the <span class=code>string</span> class of the standard library
+       in this workshop.&nbsp; You may use the <span class=code>cstring</span> functions.
+       </p>
+       <p>
+       Include in your implementation file:
+       </p>
+       <ul>
+       <li>the definition of a global variable that holds the initial value of the
+       record counter.&nbsp;
+       </li>
+       </ul>
+
+       <p class="ssection">Process Module</p>
+
+       <p>The <span class=code>Process</span> module consists of a single function that
+       receives the address of a C-style null-terminated string, creates a
+       <span class=code>CString</span> object using the string, and inserts
+       the object into the output stream.&nbsp;
+       </p>
+       <p>
+       You can find copies of the header and implementation files for this module
+       <a href="345_w1_Process.h">here</a> and <a href="345_w1_Process.cpp">here</a> respectively.
+       </p>
+
+       <p class="ssection">w1 Module</p>
+
+       <p>Code the implementation file for a <span class="code">main()</span>
+       function that receives the name of an input file as a command-line
+       argument.&nbsp; Your function echoes the command-line input, checks
+       for the correct number of command-line arguments, and if successful,
+       attempts to open the named file for reading.&nbsp;
+       </p>
+       <p>
+       If successful, your function reads a record from the file.&nbsp; If your
+       function has read the record successfully, it passes the address of the
+       record to the <span class=code>process</span> function of the
+       <span class=code>Process</span> module.&nbsp; Your function continues extracting
+       records from the file until it has read all of them.&nbsp; You
+       may assume that any record in any file available will never contain
+       more than 1000 characters.
+       </p>
+       <p>
+       If the user has not entered enough arguments, your function inserts an error
+       message into the error stream and terminates execution.&nbsp; If the user has
+       entered too many arguments, your function inserts an error message into the error
+       stream and terminates execution.&nbsp; If your function fails to open the named
+       file for reading, your function inserts an error message into the error stream
+       and terminates execution.&nbsp; Sample error messages are shown below:
+       </p>
+       <table width="45%" summary="">
+        <tr>
+         <td>
+          <pre class="result">
+ Command Line : w1
+
+ *** Insufficient number of arguments ***
+ Usage: w1 filename
+
+ Command Line : w1 file1.dat file2.dat
+
+ *** Too many arguments ***
+ Usage: w1 filename
+
+ Command Line : w1 file1.dat
+
+ *** Failed to open file file1.dat ***
+ </pre>
+         </td>
+        </tr>
+       </table>
+
+       <p>
+       Define a global variable that holds the initial value of the
+       record counter and initialize that variable to the value
+       <span class=code>10</span>.
+       </p>
+
+       <p class="ssection">Input File</p>
+
+       <p>The input file for your program is named <span class=code>Courses.dat</span>.&nbsp;
+       You can find a copy of this file <a href="https://ict.senecacollege.ca/~btp305/pages/workshops/Courses.dat">here</a>.</p>
+
+       <p class="ssection">Sample Output</p>
+
+       <p>The output from a successful run of your program looks like:</p>
+
+       <table width="45%" summary="">
+        <tr>
+         <td>
+          <pre class="result">
+ Command Line : w1 Courses.dat
+ Reading records from file Courses.dat
+  No  Record Contents ...
+  10: OOP244 - Intro
+  11: OOP345 - Objec
+  12: GPU621 - Paral</pre>
+         </td>
+        </tr>
+       </table>
+
+       <p class="ssection">Test Runs</p>
+
+       <p>
+       Build and test your program using the Visual Studio compiler.
+       </p>
+       <br />
+
+       <p id="sub" class="section">SUBMISSION</p>
+
+       <p>Follow your professor's submission instructions.&nbsp;
+       </p>
+       <p>
+       Unless otherwise stated by your instructor, your submission
+       should include the following components:
+       </p>
+       <ol>
+       <li>source code for your <span class=code>w1</span> module</li>
+       <li>source code for your <span class=code>Process</span> module</li>
+       <li>source code for your <span class=code>CString</span> module</li>
+       <li>a text file named <span class=code>reflect.txt</span> that
+       includes your answers to the following questions:
+       <ul>
+       <li>identify the linkage, if any, between your modules</li>
+       <li>identify the storage duration of the variable that keeps track
+       of the record number in the insertion operator for your
+       <span class=code>CString</span> class.</li>
+       <li>what did you learn in completing this workshop?</li>
+       </ul>
+       </ol>
+
+       <p class="ssection">Bonus (20%)</p>
+       <p>
+       Convert your implementation of the <span class=code>CString</span>
+       class to accept and store a C-style null-terminated string of any
+       length supplied by the client code.&nbsp; Ensure that there are no
+       memory leaks in your upgrade and that both copying and copy assigning
+       facilities are supported.&nbsp;
+       </p>
+
+       <br />
+       <br />
+       <br />
+      </td>
+     </tr>
+    </table>
+   </td><!-- Detail Menu -->
+
+   <td class="panel1 w150" valign="top" rowspan="2">
+    <ul id="mennav">
+     <li><a href="../welco.html">Welcome</a></li>
+
+     <li><a href="../content/index.html">Notes</a></li>
+
+     <li><a class="active" href=
+     "index.html">Workshops</a></li>
+
+     <li><a class="active" href="w1.html">&#160;Translation</a></li>
+
+     <li><a href="w2.html">&#160;Move&nbsp;Copy</a></li>
+
+     <li><a href="w3.html">&#160;Templates</a></li>
+
+     <li><a href="w4.html">&#160;Containers</a></li>
+
+     <li><a href="w5.html">&#160;Lambda&#160;Expressions</a></li>
+
+     <li><a href="w6.html">&#160;STL&nbsp;Containers</a></li>
+
+     <li><a href="w7.html">&#160;STL&#160;Algorithms</a></li>
+
+     <li><a href="w8.html">&#160;Smart&nbsp;Pointers</a></li>
+
+     <li><a href="w9.html">&#160;Multi-Threading</a></li>
+
+     <li><a href="../assignments/index.html">Assignments</a></li>
+
+     <li><a href="../handouts/index.html">Handouts</a></li>
+
+     <li><a href="../practice/index.html">Practice</a></li>
+
+     <li><a href="../resources/index.html">Resources</a></li>
+    </ul>
+   </td>
+  </tr><!-- Content Area Footer -->
+
+  <tr class="navigate">
+   <td class="panel3" align="center">
+    <table class="panel2" width="95%" summary="footer">
+     <tr>
+      <td align="left">&#160;&#160; <a href="w1_p.html" class=
+      "text3"><img src="../images/Printer.gif" height="15" width="10"
+      alt="Printer Friendly Version of this Page" />&#160;print this
+      page</a>&#160;&#160;</td>
+
+      <td align="right">&#160;&#160;<a href="w1.html#top" class=
+      "text3">Top&#160; <img src="../images/ArrowToT.gif" height="15"
+      width="15" alt="Go Back to the Top of this Page" /></a></td>
+     </tr>
+    </table>
+   </td>
+  </tr><!-- Footer -->
+
+  <tr>
+   <!-- Left Panel -->
+
+   <td class="panel1 lateral center">
+    <!-- Lateral Motion Control -->
+    <!--<table width="90%" class="center" summary="previous next">
+                <tr>
+                    <td class="half" align="left">
+                        <a href="datat.html" class="text3">
+                        <img src="../images/ArrowToL.gif" height="15" width="15" class="panel1" alt="Previous Reading" />&nbsp;&nbsp;Previous: Primitive Data Types</a>
+                    </td>
+                    <td class="half" align="left">
+                        <a href="modul.html" class="text3">Next: Modular Programs&nbsp;&nbsp;
+                        <img src="../images/ArrowToR.gif" height="15" width="15" class="panel1" alt="Next Reading" /></a>
+                    </td>
+                </tr>
+            </table>-->
+
+    <br />
+    <!-- Alternate Navigation Links -->
+
+    <ul id="altnav" class="center">
+     <li><script type="text/javascript" src="../ict.js"></script></li>
+     <li><a href="../../index.html">Home</a></li>
+     <li><script type="text/javascript" src="../outline.js"></script></li>
+     <li><a href="../timeline.html">Timeline&#160;</a></li>
+    </ul>
+    <ul id="altnav2" class="center">
+     <li><a href="../content/index.html">Notes</a></li>
+     <li><script type="text/javascript" src="../classroom_a.js"></script></li>
+     <li><script type="text/javascript" src="../classroom_b.js"></script></li>
+     <li><a class="active" href="index.html">Workshops</a></li>
+     <li><a href="../assignments/index.html">Assignments</a></li>
+     <li><a href="../instructors/index.html">Instructor</a></li>
+    </ul>
+    <br />
+    <!-- Bottom Line -->
+
+    <table cellpadding="1" width="90%" summary="bottom line">
+     <tr>
+      <td class="w33 text3">&#160;&#160;Designed by Chris
+      Szalwinski&#160;&#160;</td>
+
+      <td class="w33 center"><a href="../copyright.html" class=
+      "text3">Copying From This Site</a></td>
+
+      <td class="w33 text3" align="right">
+       <script type="text/javascript">
+//<![CDATA[
+                        var lm = document.lastModified.slice(0,-3);
+                        document.write("Last Modified: " +lm)
+       //]]>
+       </script>&#160;&#160;
+      </td>
+     </tr>
+    </table>
+   </td><!-- Logo - Right Bottom Corner -->
+
+   <td class="panel2 w150" align="center"><img src="../images/Logo.gif"
+   alt="Logo" height="73" width="85" /><br /><a rel="license" href="https://creativecommons.org/licenses/by/2.5/ca/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/2.5/ca/88x31.png" /></a></td>
+  </tr>
+ </table>
+</body>
+</html>

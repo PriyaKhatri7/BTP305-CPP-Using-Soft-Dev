@@ -1,0 +1,362 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC
+    '-//W3C//DTD XHTML 1.0 Transitional//EN'
+    'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html lang="en-us" xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+    <title>OO Software Development Using C++11 | ICT - Seneca</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' />
+
+    <meta name="Copyright" content="(c) Copyright Seneca College 2014" />
+    <meta name="Description" content="Welcome to the OOP345 Web Site.  On this site you can find an intermediate course on object-oriented programming in C++.  Designed by Chris Szalwinski." />
+    <meta name="Abstract" content="This subject expands on introductory elements of C++ and covers intermediate C features.  The emphasis throughout is to prepare for the solution of large problems."/>
+    <meta name="Author" content="chris.szalwinski@senecac.on.ca"/>
+    <meta name="Keywords" content="software development, object-oriented programming, lecture notes"/>
+
+    <link rel="stylesheet" type="text/css" href="../style.043.css">
+    <link rel="stylesheet" type="text/css" href="../styleSPrint.043.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="../stylePPrint.043.css" media="print">
+</head>
+
+<body>
+ <table cellspacing="0" cellpadding="0" summary="banner"><!-- Body Cell -->
+  <tr class="content"><!-- Content Area -->
+   <td class="tbody">
+    <table cellpadding="10" width="100%" summary="content">
+     <tr>
+      <td class="content" valign="top">
+       <br />
+
+       <div class="center">
+        <span class="texth">Part E - Standard Template Library</span>
+        <br />
+        <br />
+        <span class="texthead">STL Algorithms</span>
+        <br />
+        <br />
+        <span class="textagend">Workshop 7</span>
+       </div>
+       <br />
+       <br />
+
+       <p>In this workshop, you use the Standard Template Library's algorithms to evaluate sample data.</p>
+       <br />
+
+       <p class="section">Learning Outcomes</p>
+
+       <p>Upon successful completion of this workshop, you will have demonstrated
+       the abilities to</p>
+
+       <ul>
+        <li>copy data from a file into a sequential container</li>
+        <li>accumulate data values using the STL's numeric library</li>
+        <li>specify an operation on each value in a data set using a lambda expression</li>
+        <li>sort the data values in a data set using the STL's algorithm</li>
+        <li>reflect on what you have learned in this workshop</li>
+       </ul>
+       <br />
+
+       <p class="section">Introduction to Statistical Analysis</p>
+
+       <p>
+       Statistical analysis uses standard measures to make predictions based on
+       a small sample of the actual data:
+       </p>
+       <ul>
+        <li>sample mean - the average of all values in the sample</li>
+        <li>sample standard deviation - the spread of the numbers away from their mean</li>
+        <li>sample median - the middle number in the sorted set of the values (that is,
+        the value separating the lower and upper halves of the data in a sorted set)</li>
+       </ul>
+       <p>
+       The formula for sample mean is
+       </p>
+       <pre>
+ z<sub>mean</sub> = ( &Sigma;<sub>i</sub>z<sub>i</sub> ) / n</pre>
+       <p>
+       The symbol <span class=code>&Sigma;</span> denotes 'sum of',
+       <span class=code>i</span> refers to an element in the set, and
+       <span class=code>n</span> refers to the number of elements in the set.&nbsp;
+       </p>
+       <p>
+       The formula for sample standard deviation (<span class=code>ssd</span>) is
+       </p>
+       <pre>
+ ssd = &radic;{ [ &Sigma;<sub>i</sub>(z<sub>i</sub> - z<sub>mean</sub>)<sup>2</sup> ] / (n - 1) }</pre>
+
+       <p class="ssection">Regression Line</p>
+
+       <p>
+       A regression line relates a set of independent (x) values to a corresponding set
+       of dependent (y) values.&nbsp; The number of values in each set is the same in both sets.&nbsp;
+       Each value in the independent set has one corresponding value in the dependent set.&nbsp;
+       </p>
+        <p class="center"><img src="../images/w8.png" width=
+        "222" height="151" alt="" /></p>
+       <p>
+       The regression line best fits the pairs of data values.&nbsp; It is the
+       line that passes through the data points drawn on a two-dimensional (x,y) system
+       of coordinates as close as possible to the data points.&nbsp; The line's coefficients
+       are:&nbsp;
+       </p>
+       <ul>
+        <li><span class=code>slope</span> - the slope of the line in the x-y plane</li>
+        <li><span class=code>y_intercept</span> - the y value of the line where it crosses the y-axis</li>
+       </ul>
+       <p>
+       The formulas for these two coefficients are:
+       </p>
+       <pre>
+ slope       = [ n ( &Sigma;<sub>i</sub>x<sub>i</sub>y<sub>i</sub> ) - &Sigma;<sub>i</sub>x<sub>i</sub> &Sigma;<sub>i</sub>y<sub>i</sub> ] / [ n (&Sigma;<sub>i</sub>x<sub>i</sub><sup>2</sup>) - (&Sigma;<sub>i</sub>x<sub>i</sub>)<sup>2</sup> ]
+ y_intercept = [ &Sigma;<sub>i</sub>y<sub>i</sub> - slope * &Sigma;<sub>i</sub>x<sub>i</sub> ] / n</pre>
+
+       <p>
+       You can find a linear regression calculator <a href="https://www.easycalculation.com/statistics/regression.php">here</a>.
+       </p>
+       <br />
+
+       <p class="section">Specifications</p>
+
+       <p>
+       Code a class template named <span class=code>DataTable</span> for performing statistical analysis
+       on data stored in text files.&nbsp;
+       </p>
+       <p class="ssection">Main Program</p>
+
+       <p>
+       The <span class=code>main()</span> program listed below analyzes data using
+       your <span class=code>DataTable</span> template.&nbsp;
+       </p>
+
+       <table width="45%" summary="">
+        <tr>
+         <td>
+          <pre>
+ // Workshop 8 - STL Algorithms
+ // w8.cpp
+
+ #include &lt;iostream&gt;
+ #include &lt;iomanip&gt;
+ #include &lt;fstream&gt;
+ #include &lt;string&gt;
+ #include "DataTable.h"
+
+ const int FW = 7;
+ const int ND = 2;
+
+ int main(int argc, char** argv) {
+     std::cout &lt;&lt; "\nCommand Line : ";
+     for (int i = 0; i &lt; argc; i++) {
+         std::cout &lt;&lt; argv[i] &lt;&lt; ' ';
+     }
+     std::cout &lt;&lt; std::endl;
+     if (argc != 2 && argc != 3) {
+         std::cerr &lt;&lt; argv[0] &lt;&lt; ": incorrect number of arguments\n";&nbsp;
+         std::cerr &lt;&lt; "Usage: " &lt;&lt; argv[0] &lt;&lt; " file_name [p]\n";
+         return 1;
+     }
+     std::ifstream dataFile(argv[1]);
+     if (!dataFile) {
+         std::cerr &lt;&lt; "\n***Failed to open file " &lt;&lt; argv[1] &lt;&lt; "***\n";
+         return 2;
+     }
+
+     try {
+         w8::DataTable&lt;float&gt; data(dataFile, FW, ND);
+         if (argc == 3) {
+             std::cout &lt;&lt; "\nData Values\n===========\n";
+             std::cout &lt;&lt; data &lt;&lt; std::endl;
+         }
+         float m, c;
+         data.regression(m, c);
+         std::cout &lt;&lt; "\nStatistics\n==========\n";
+         std::cout &lt;&lt; std::fixed &lt;&lt; std::setprecision(ND);
+         std::cout &lt;&lt; "y mean    = " &lt;&lt; std::setw(FW) &lt;&lt; data.mean() &lt;&lt;
+          "\ny sigma   = " &lt;&lt; std::setw(FW) &lt;&lt; data.sigma() &lt;&lt;
+          "\ny median  = " &lt;&lt; std::setw(FW) &lt;&lt; data.median() &lt;&lt; std::endl;&nbsp;
+         std::cout &lt;&lt; "slope     = " &lt;&lt; std::setw(FW) &lt;&lt; m &lt;&lt;
+          "\nintercept = " &lt;&lt; std::setw(FW) &lt;&lt; c &lt;&lt; std::endl;
+     }
+     catch (std::string& msg) {
+         std::cout &lt;&lt; msg &lt;&lt; std::endl;
+         return 3;
+     }
+
+     std::cout &lt;&lt; "\nPress any key to continue ... ";
+     std::cin.get();
+ }
+</pre>
+         </td>
+        </tr>
+       </table>
+       <p>
+       The first command-line argument is the name of the file to analyze.&nbsp; The second
+       argument, if present, requests a listing of all data values retrieved by the object.
+       </p>
+
+       <p class="ssection">Data Files</p>
+
+       <p>
+       The data for this workshop is stored in the following three files:
+       </p>
+       <ul>
+       <li><span class=code><a href="Simple.dat.html">Simple.dat</a></span> - test 1</li>
+       <li><span class=code><a href="Flat.dat.html">Flat.dat</a></span> - test 2</li>
+       <li><span class=code><a href="HS_College_GPA.dat.html">HS_College_GPA.dat</a></span> - high school and college GPA comparisons</li>
+       </ul>
+
+       <p>
+       Each record in each file contains two fields.&nbsp; The first field holds the
+       independent value (x coordinate).&nbsp; The second field holds the dependent
+       value (y coordinate).&nbsp;
+       For example, the file named <span class=code>Simple.dat</span> contains
+       </p>
+
+       <table width="45%" summary="">
+        <tr>
+         <td>
+          <pre>
+ 2.1 8
+ 2.5 12
+ 4.0 14
+ 3.6 10</pre>
+         </td>
+        </tr>
+       </table>
+
+       <p class="ssection">DataTable Class Template</p>
+
+       <p>
+       Upon instantiation, a <span class=code>DataTable</span> object receives a reference to
+       the file stream that holds the data values, the field width for displaying the data
+       and the number of decimals to display.&nbsp; The object retrieves the data values
+       from the file and stores them in its instance variables.&nbsp;
+       </p>
+       <p>
+       Your design includes the following queries:
+       </p>
+
+       <ul>
+        <li><span class="code">T mean() const</span> - returns the mean value of the dependent coordinate</li>
+        <li><span class="code">T sigma() const</span> - returns the standard deviation of the dependent coordinates</li>
+        <li><span class="code">T median() const</span> - returns the median value of the dependent coordinate</li>
+        <li><span class="code">void regression(T& slope, T& y_intercept) const</span> - returns the slope and intercept for the data set</li>
+        <li><span class="code">void display(std::ostream&) const</span> - displays the data pairs as shown below</li>
+       </ul>
+
+       <p>
+       Your design also overloads the insertion operator as a helper for the <span class=code>DataTable</span> class:
+       </p>
+       <ul>
+        <li><span class="code">std::ostream& operator&lt;&lt;(std::ostream&, const DataTable&)</span> - inserts the data generated by <span class=code>display()</span> into the output stream</li>
+       </ul>
+       <p>
+       Code your member functions to meet all of the learning outcomes.
+       </p>
+
+
+       <p class="ssection">Test Runs</p>
+
+       <p>
+       The results of your test runs on the data files should be similar to those listed below.
+       </p>
+
+       <p class="sssection">Simple.dat</p>
+
+       <table width="45%" summary="">
+        <tr>
+         <td>
+          <pre class=result>
+ Command Line : w8 Simple.dat p
+
+ Data Values
+ ===========
+       x      y
+    2.10   8.00
+    2.50  12.00
+    4.00  14.00
+    3.60  10.00
+
+
+ Statistics
+ ==========
+ y mean    =   11.00
+ y sigma   =    2.58
+ y median  =   12.00
+ slope     =    1.91
+ intercept =    5.18
+
+ Press any key to continue ...</pre>
+         </td>
+        </tr>
+       </table>
+
+       <p class="sssection">Flat.dat</p>
+
+       <table width="45%" summary="">
+        <tr>
+         <td>
+          <pre class=result>
+ Command Line : w8 Flat.dat p
+
+ Data Values
+ ===========
+       x      y
+    1.00   1.00
+    2.00   1.00
+    3.00   1.00
+    4.00   1.00
+
+
+ Statistics
+ ==========
+ y mean    =    1.00
+ y sigma   =    0.00
+ y median  =    1.00
+ slope     =    0.00
+ intercept =    1.00
+
+ Press any key to continue ...</pre>
+         </td>
+        </tr>
+       </table>
+
+       <p class="sssection">HS_College_GPA.dat</p>
+
+       <table width="45%" summary="">
+        <tr>
+         <td>
+          <pre class=result>
+ Command Line : w8 HS_College_GPA.dat&nbsp;
+
+ Statistics
+ ==========
+ y mean    =    3.12
+ y sigma   =    0.51
+ y median  =    3.21
+ slope     =    0.78
+ intercept =    0.73
+
+ Press any key to continue ...</pre>
+         </td>
+        </tr>
+       </table>
+
+       <br />
+
+       <p class="section">Submission</p>
+
+       <p>Follow your professor's submission instructions</p>
+       <br />
+       <br />
+       <br />
+      </td>
+     </tr>
+    </table>
+   </td>
+  </tr>
+ </table>
+</body>
+</html>

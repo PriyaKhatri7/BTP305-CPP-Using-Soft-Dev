@@ -1,0 +1,385 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC
+    '-//W3C//DTD XHTML 1.0 Transitional//EN'
+    'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html lang="en-us" xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+    <title>OO Software Development Using C++11 | ICT - Seneca</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' />
+
+    <meta name="Copyright" content="(c) Copyright Seneca College 2014" />
+    <meta name="Description" content="Welcome to the OOP345 Web Site.  On this site you can find an intermediate course on object-oriented programming in C++.  Designed by Chris Szalwinski." />
+    <meta name="Abstract" content="This subject expands on introductory elements of C++ and covers intermediate C features.  The emphasis throughout is to prepare for the solution of large problems."/>
+    <meta name="Author" content="chris.szalwinski@senecac.on.ca"/>
+    <meta name="Keywords" content="software development, object-oriented programming, lecture notes"/>
+
+    <link rel="stylesheet" type="text/css" href="../style.043.css">
+    <link rel="stylesheet" type="text/css" href="../styleSPrint.043.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="../stylePPrint.043.css" media="print">
+</head>
+
+<body>
+ <table cellspacing="0" cellpadding="0" summary="banner"><!-- Body Cell -->
+  <tr class="content"><!-- Content Area -->
+   <td class="tbody">
+    <table cellpadding="10" width="100%" summary="content">
+     <tr>
+      <td class="content" valign="top">
+       <br />
+
+       <div class="center">
+        <span class="texth">Parts G/H - Performance, Related Topics</span>
+        <br />
+        <br />
+        <span class="texthead">Multi-Threading</span>
+        <br />
+        <br />
+        <span class="textagend">Workshop 9</span>
+       </div>
+       <br />
+       <br />
+
+       <p>In this workshop, you backup an encrypted text file of characters to
+       a binary file, restore the encrypted data from the binary file and add
+       multi-threading to the solution.</p>
+       <br />
+
+       <p class="section">Learning Outcomes</p>
+
+       <p>Upon successful completion of this workshop, you will have demonstrated
+       the abilities to</p>
+
+       <ul>
+        <li>execute partitioned data on two or more threads</li>
+        <li>write a set of characters to a file in binary mode</li>
+        <li>read a set of characters from a file in binary mode</li>
+        <li>bind a function to its arguments</li>
+        <li>reflect on the experience gained in this workshop</li>
+       </ul>
+       <br />
+
+       <p class="section">Specifications</p>
+
+       <p>
+       This workshop has two parts:
+       </p>
+       <ol>
+       <li>Implementing Binary File Access</li>
+       <li>Implementing Multi-Threading</li>
+       </ol>
+
+       <p class="ssection">Files Provided</p>
+
+       <p>
+       The three source files provided for this workshop are listed below
+       </p>
+       <ul>
+        <li><span class="code">SecureData.h</span> (complete)</li>
+        <li><span class="code">SecureData.cpp</span> (incomplete)</li>
+        <li><span class="code">w10.cpp</span> (complete)</li>
+       </ul>
+
+       <p>
+       The test data file for this workshop is at
+       </p>
+       <ul>
+        <li><span class="code"><a href="w10_text.dat">w10_text.dat</a></span></li>
+       </ul>
+
+       <p>
+       The <span class=code>SecureData</span> class holds text in encoded form along with
+       the number of bytes in the text including the null terminator.&nbsp; The
+       <span class=code>Cryptor</span> function object holds the encryption/decryption
+       logic used by the <span class=code>SecureData</span> class.&nbsp;
+       </p>
+
+       <p class="sssection">SecureData.h</p>
+
+       <table width="45%" summary="">
+        <tr>
+         <td>
+          <pre>
+ // Workshop 10 - Multi-Threading
+ // SecureData.h
+
+ #include &lt;iostream&gt;
+
+ namespace w10 {
+
+     class Cryptor {
+       public:
+         char operator()(char in, char key) const { return in ^ key; }&nbsp;
+     };
+     void converter(char*, char, int, const Cryptor&);
+
+     class SecureData {
+         char* text;
+         int nbytes;
+         bool encoded;
+         void code(char);
+       public:
+         SecureData(const char*, char);
+         SecureData(const SecureData&) = delete;
+         SecureData& operator=(const SecureData&) = delete;
+         ~SecureData();
+         void display(std::ostream&) const;
+         void backup(const char*);
+         void restore(const char*, char);
+     };
+     std::ostream& operator&lt;&lt;(std::ostream&, const SecureData&);
+ }
+</pre>
+         </td>
+        </tr>
+       </table>
+
+       <p class="sssection">SecureData.cpp</p>
+
+       <table width="45%" summary="">
+        <tr>
+         <td>
+          <pre>
+ // Workshop 10 - Multi-Threading
+ // SecureData.cpp
+
+ #include &lt;iostream&gt;
+ #include &lt;fstream&gt;
+ #include &lt;string&gt;
+ #include "SecureData.h"
+
+ namespace w10 {
+
+     void converter(char* t, char key, int n, const Cryptor& c) {
+         for (int i = 0; i &lt; n; i++)
+             t[i] = c(t[i], key);
+     }
+
+     SecureData::SecureData(const char* file, char key) {
+         // open text file
+         std::fstream input(file, std::ios::in);
+         if (!input)
+             throw std::string("\n***Failed to open file ") +
+              std::string(file) + std::string(" ***\n");
+
+         // copy from file into memory
+         nbytes = 0;
+         input &gt;&gt; std::noskipws;
+         while (input.good()) {
+             char c;
+             input &gt;&gt; c;
+             nbytes++;
+         }
+         nbytes--;
+         input.clear();
+         input.seekg(0, std::ios::beg);
+         text  = new char[nbytes + 1];
+
+         int i = 0;
+         while (input.good())
+             input &gt;&gt; text[i++];
+         text[--i] = '\0';
+         std::cout &lt;&lt; "\n" &lt;&lt; nbytes &lt;&lt; " bytes copied from text "
+          &lt;&lt; file &lt;&lt; " into memory (null byte added)\n";
+         encoded = false;
+
+         // encode using key
+         code(key);
+         std::cout &lt;&lt; "Data encrypted in memory\n";
+     }
+
+     SecureData::~SecureData() {
+         delete [] text;
+     }
+
+     void SecureData::display(std::ostream& os) const {
+         if (text && !encoded)
+             os &lt;&lt; text &lt;&lt; std::endl;
+         else if (encoded)
+             throw std::string("\n***Data is encoded***\n");
+         else
+             throw std::string("\n***No data stored***\n");
+     }
+
+     void SecureData::code(char key) {
+         converter(text, key, nbytes, Cryptor());
+         encoded = !encoded;
+     }
+
+     void SecureData::backup(const char* file) {
+         if (!text)
+             throw std::string("\n***No data stored***\n");
+         else if (!encoded)
+             throw std::string("\n***Data is not encoded***\n");
+         else {
+             // open binary file
+
+             <span class=high>// write binary file here</span>
+
+         }
+     }
+
+     void SecureData::restore(const char* file, char key) {
+         // open binary file
+
+         <span class=high>
+         // allocate memory here
+
+         // read binary file here</span>
+
+
+         std::cout &lt;&lt; "\n" &lt;&lt; nbytes + 1 &lt;&lt; " bytes copied from binary file "&nbsp;
+          &lt;&lt; file &lt;&lt; " into memory (null byte included)\n";
+         encoded = true;
+
+         // decode using key
+         code(key);
+         std::cout &lt;&lt; "Data decrypted in memory\n\n";
+     }
+
+     std::ostream& operator&lt;&lt;(std::ostream& os, const SecureData& sd) {
+         sd.display(os);
+         return os;
+     }
+
+ }</pre>
+         </td>
+        </tr>
+       </table>
+
+       <p class="sssection">main Program</p>
+
+       <p>
+       The <span class=code>main()</span> program that uses the <span class=code>SecureData</span>
+       and the <span class=code>Cryptor</span> classes is listed below.&nbsp;
+       </p>
+
+       <table width="45%" summary="">
+        <tr>
+         <td>
+          <pre>
+ // Workshop 10 - Multi-Threading
+ // w10.cpp
+
+ #include &lt;iostream&gt;
+ #include &lt;string&gt;
+ #include "SecureData.h"
+
+ int main(int argc, char** argv) {
+     std::cout &lt;&lt; "\nCommand Line : ";
+     for (int i = 0; i &lt; argc; i++) {
+         std::cout &lt;&lt; argv[i] &lt;&lt; ' ';
+     }
+     std::cout &lt;&lt; std::endl;
+     if (argc != 4) {
+         std::cerr &lt;&lt; "\n***Incorrect number of arguments***\n";&nbsp;
+         return 1;
+     }
+     char key = argv[3][0];
+
+     try {
+         w10::SecureData sd(argv[1], key);
+         sd.backup(argv[2]);
+
+         sd.restore(argv[2], key);
+         std::cout &lt;&lt; sd &lt;&lt; std::endl;
+
+     } catch (const std::string& msg) {
+         std::cerr &lt;&lt; msg &lt;&lt; std::endl;
+     }
+
+     std::cout &lt;&lt; "\nPress any key to continue ... ";
+     std::cin.get();
+}</pre>
+         </td>
+        </tr>
+       </table>
+       <p>
+       </p>
+
+       <p class="ssection">Part 1 - Binary File Access</p>
+
+       <p>
+       Your first task is to complete the <span class=code>backup()</span>
+       and <span class=code>restore()</span> member functions of the
+       <span class=code>SecureData</span> class.&nbsp; Your code in each
+       case should open the binary file in the appropriate mode and throw
+       an exception if opening fails.&nbsp; For backup, your code simply
+       writes the data to the file.&nbsp; For restoration, your code
+       deallocates the existing data, determines the number of bytes
+       to be read, allocates memory for them, and read the data from
+       the file.
+       </p>
+
+       <p class="sssection">Output</p>
+
+       <p>
+       The output from a completed version of this program should look like:
+       </p>
+
+       <table width="45%" summary="">
+        <tr>
+         <td>
+          <pre class=result>
+
+ Command Line : w10 w10_text.dat encoded.dat %
+
+ 928 bytes copied from text w10_text.dat into memory (null byte added)
+ Data encrypted in memory
+
+ 929 bytes copied from binary file encoded.dat into memory (null byte included)&nbsp;
+ Data decrypted in memory
+
+ Compound types are types that a programmer constructs from a language's
+ fundamental types and/or other compound types.  In C++11, compound types
+ include pointers and references to existing types, enumerations of named
+ constant values, arrays of objects of an existing type, classes and function
+ types.  C++11 clarified the difference between lvalues and rvalues and
+ references to each, which helped simplify many of the facilities available
+ in the standard library.
+
+ This chapter describes the non-function types in detail.  The description
+ includes a review of one-dimensional arrays in both static and dynamic memory
+ and shows how to allocate multi-dimensional arrays in both static and dynamic
+ memory.  The description of classes reviews class definitions, introduces
+ move-constructors and move-assignment operators and includes declarations of
+ special members such as bit fields, class variables and class functions.
+
+
+ Press any key to continue ...</pre>
+         </td>
+        </tr>
+       </table>
+
+       <p class="ssection">Part 2 - Multi-Threading</p>
+
+       <p>
+       Your second task is to multi-thread the conversion in the <span class=code>code()</span>
+       member function of the <span class=code>SecureData</span> class.&nbsp;  Select a
+       reasonable number of threads and partition the data equally amongst all of the
+       threads.&nbsp; Use <span class=code>std::bind</span> from the <span class=code>functional</span>
+       library to bind the <span class=code>converter</span>
+       </p>
+
+       <p>
+       The results for this section should be identical to those shown above.
+       </p>
+
+       <br />
+
+       <p class="section">Submission</p>
+
+       <p>Follow your professor's submission instructions</p>
+
+       <br />
+       <br />
+       <br />
+      </td>
+     </tr>
+    </table>
+   </td>
+  </tr>
+ </table>
+</body>
+</html>

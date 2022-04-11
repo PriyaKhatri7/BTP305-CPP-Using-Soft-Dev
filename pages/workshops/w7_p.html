@@ -1,0 +1,283 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC
+    '-//W3C//DTD XHTML 1.0 Transitional//EN'
+    'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html lang="en-us" xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+    <title>OO Software Development Using C++11 | ICT - Seneca</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' />
+
+    <meta name="Copyright" content="(c) Copyright Seneca College 2014" />
+    <meta name="Description" content="Welcome to the OOP345 Web Site.  On this site you can find an intermediate course on object-oriented programming in C++.  Designed by Chris Szalwinski." />
+    <meta name="Abstract" content="This subject expands on introductory elements of C++ and covers intermediate C features.  The emphasis throughout is to prepare for the solution of large problems."/>
+    <meta name="Author" content="chris.szalwinski@senecac.on.ca"/>
+    <meta name="Keywords" content="software development, object-oriented programming, lecture notes"/>
+
+    <link rel="stylesheet" type="text/css" href="../style.043.css">
+    <link rel="stylesheet" type="text/css" href="../styleSPrint.043.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="../stylePPrint.043.css" media="print">
+</head>
+
+<body>
+ <table cellspacing="0" cellpadding="0" summary="banner"><!-- Body Cell -->
+  <tr class="content"><!-- Content Area -->
+   <td class="tbody">
+    <table cellpadding="10" width="100%" summary="content">
+     <tr>
+      <td class="content" valign="top">
+       <br />
+
+       <div class="center">
+        <span class="texth">Part E - Standard Template Library</span>
+        <br />
+        <br />
+        <span class="texthead">STL Containers</span>
+        <br />
+        <br />
+        <span class="textagend">Workshop 6</span>
+       </div>
+       <br />
+       <br />
+
+       <p>In this workshop, you store a set of polymorphic objects in an STL container.</p>
+       <br />
+
+       <p class="section">Learning Outcomes</p>
+
+       <p>Upon successful completion of this workshop, you will have demonstrated
+       the abilities to</p>
+
+       <ul>
+        <li>store and manage polymorphic objects using an STL vector</li>
+        <li>store a set of uniform rates for all instances of a class using a class array</li>
+        <li>report and handle an exception</li>
+        <li>reflect on what you have learned in this workshop</li>
+       </ul>
+       <br />
+
+       <p class="section">Specifications</p>
+
+       <p>
+       This workshop consists of three modules:
+       </p>
+       <ul>
+       <li><span class=code>w7</span> - the main program receives the name of the file that holds
+       information about the products sold to a customer</li>
+       <li><span class=code>Sale</span> - contains the list of products sold to the customer</li>
+       <li><span class=code>iProduct</span> hierachy - each object describes a single
+       product sold to the customer</li>
+       </ul>
+       <p>
+       The <span class=code>main</span> program receives the a user-specified file.&nbsp; The records
+       hold price information about products, some of which are taxable.&nbsp; Taxable
+       and non-taxable products belong to the same hierarchy; the taxable product class
+       derives from the simpler product class.
+       </p>
+
+       <p class="ssection">File Records</p>
+
+       <p>
+       Each record in the file consists of two or three fields: a
+       product number field, a product cost field and an optional taxable code field.&nbsp;
+       The cost field contains the price before any tax.&nbsp; The contents of the
+       <a href="Sales.dat.html">test file</a> for this workshop are:
+       </p>
+
+       <table width="45%" summary="">
+        <tr>
+         <td>
+          <pre>
+ 10012 34.56
+ 10023 45.67 H
+ 10234 12.32 P
+ 10056 67.54
+ 10029 54.12 H
+ 10034 96.30
+</pre>
+         </td>
+        </tr>
+       </table>
+       <ul>
+        <li><span class=code>H</span> identifies a taxable product at the HST rate</li>
+        <li><span class=code>P</span> identifies a taxable product at the PST rate</li>
+       </ul>
+       <p>
+       A non-taxable record terminates with a newline character immediately following the price field.&nbsp;
+       A record with a taxable code other than the two listed above is an invalid record.&nbsp; A file
+       with an invalid record is a corrupted file.&nbsp;
+       </p>
+
+       <p class="ssection">iProduct Hierarchy</p>
+
+       <p>
+       The <span class=code>iProduct</span> hierarchy holds information about the different
+       products purchased by a customer.&nbsp; The interface to this hierarchy is:
+       </p>
+
+       <table width="45%" summary="">
+        <tr>
+         <td>
+          <pre>
+ #ifndef _I_PRODUCT_H_
+ #define _I_PRODUCT_H_
+
+ // Workshop 7 - STL Containers
+ // iProduct.h
+
+ #include &lt;iostream&gt;
+ #include &lt;fstream&gt;
+
+ namespace w7 {
+
+     class iProduct {
+       public:
+         virtual double getCharge() const = 0;
+         virtual void display(std::ostream&) const = 0;
+     };
+
+     std::ostream& operator&lt;&lt;(std::ostream&, const iProduct&);&nbsp;
+     iProduct* readProduct(std::ifstream&);
+
+ }
+ #endif</pre>
+         </td>
+        </tr>
+       </table>
+       <p>
+       The <span class=code>double getCharge() const</span> query returns the price chargable to the customer.
+       </p>
+       <p>
+       The <span class=code>void display(std::ostream& os) const</span> query receives a reference
+       to the output stream and inserts the product information in the form of a single line into the
+       output stream.
+       </p>
+       <p>
+       The overloaded insertion operator (<span class=code>&lt;&lt;</span>) receives a reference
+       to the output stream and displays the product information in the form of a single line on the
+       output stream.
+       </p>
+       <p>
+       The <span class=code>readProduct</span> function receives a reference to the input file
+       stream, reads the next record from the stream, allocates memory for the corresponding
+       <span class=code>iProduct</span> object, copies the record information into that object
+       and returns its address to the caller function.
+       </p>
+
+       <p class="sssection">Implementations</p>
+
+       <p>
+       Complete the definition of the polymorphic <span class=code>iProduct</span> object by implementing
+       two distinct classes:
+       </p>
+       <ul>
+        <li><span class="code">Product</span> - holds information about a product that consists of its product
+        number and its cost</li>
+        <li><span class="code">TaxableProduct</span> - derives from <span class=code>Product</span> and
+        holds additional information about the product's taxable status</li>
+       </ul>
+       <p>
+       The same tax rates apply to all <span class=code>TaxableProduct</span> objects.&nbsp; Use a class array
+       (an array of class variables) to store the tax rates for HST and PST tax codes (13% and 8%).&nbsp;
+       </p>
+
+       <p class="ssection">Sale Class</p>
+
+       <p>
+       Code a class named <span class=code>Sale</span> that holds information about the set
+       of products sold to a customer.&nbsp; Upon instantiation, a <span class=code>Sale</span>
+       object receives the address of a C-style null-terminated string that holds the name of
+       a file.&nbsp; This file contains the list of products sold to the customer.&nbsp; The
+       one-argument constructor copies the product information into an STL container.&nbsp;
+       </p>
+       <p>
+       Since the products are polymorphic objects, your class stores and accesses them
+       through a set of pointers to the objects.
+       </p>
+       <p>
+       Your class design includes the following member function:
+       </p>
+       <ul>
+        <li><span class="code">void display(std::ostream& os) const</span> - receives a reference
+        to the output object and displays the sale information as shown in the sample output
+        above.&nbsp; The output includes column headings and the total sale amount including
+        taxes paid.&nbsp; The product number and cost occupy fields of width 10.&nbsp;</li>
+       </ul>
+
+       <p class="ssection">Main Program</p>
+
+       <p>
+       Complete main program listed below.&nbsp;
+       The complete coding reports any exception thrown by the <span class=code>Sale</span>
+       object or any <span class=code>iProduct</span> object object.&nbsp; If an exception is
+       thrown, the main program returns an error code of 2.
+       </p>
+
+       <table width="45%" summary="">
+        <tr>
+         <td>
+          <pre>
+ // Workshop 7 - STL Containers
+ // w7.cpp
+
+ #include &lt;iostream&gt;
+ #include &lt;string&gt;
+ #include "Sale.h"
+
+ int main(int argc, char** argv) {
+     if (argc != 2) {
+         std::cerr &lt;&lt; argv[0] &lt;&lt; ": incorrect number of arguments\n";&nbsp;
+         std::cerr &lt;&lt; "Usage: " &lt;&lt; argv[0] &lt;&lt; " file_name\n";
+         return 1;
+     }
+
+     w7::Sale sale(argv[1]);
+     sale.display(std::cout);
+
+     std::cout &lt;&lt; "\nPress any key to continue ... ";
+     std::cin.get();
+ }</pre>
+         </td>
+        </tr>
+       </table>
+
+       <p>
+       The output from your completed main program for the file contents listed above
+       should like:
+       </p>
+
+       <table width="45%" summary="">
+        <tr>
+         <td>
+          <pre class=result>
+Product No      Cost Taxable
+     10012     34.56
+     10023     45.67 HST
+     10234     12.32 PST
+     10056     67.54
+     10029     54.12 HST
+     10034     96.30
+     Total    324.47
+
+Press any key to continue ...</pre>
+         </td>
+        </tr>
+       </table>
+
+       <br />
+
+       <p class="section">Submission</p>
+
+       <p>Follow your professor's submission instructions</p>
+       <br />
+       <br />
+       <br />
+      </td>
+     </tr>
+    </table>
+   </td>
+  </tr>
+ </table>
+</body>
+</html>

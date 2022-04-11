@@ -1,0 +1,263 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC
+    '-//W3C//DTD XHTML 1.0 Transitional//EN'
+    'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html lang="en-us" xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+    <title>OO Software Development Using C++11 | ICT - Seneca</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' />
+
+    <meta name="Copyright" content="(c) Copyright Seneca College 2014" />
+    <meta name="Description" content="Welcome to the OOP345 Web Site.  On this site you can find an intermediate course on object-oriented programming in C++.  Designed by Chris Szalwinski." />
+    <meta name="Abstract" content="This subject expands on introductory elements of C++ and covers intermediate C features.  The emphasis throughout is to prepare for the solution of large problems."/>
+    <meta name="Author" content="chris.szalwinski@senecac.on.ca"/>
+    <meta name="Keywords" content="software development, object-oriented programming, lecture notes"/>
+
+    <link rel="stylesheet" type="text/css" href="../style.043.css">
+    <link rel="stylesheet" type="text/css" href="../styleSPrint.043.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="../stylePPrint.043.css" media="print">
+</head>
+
+<body>
+ <table cellspacing="0" cellpadding="0" summary="banner"><!-- Body Cell -->
+  <tr class="content"><!-- Content Area -->
+   <td class="tbody">
+    <table cellpadding="10" width="100%" summary="content">
+     <tr>
+      <td class="content" valign="top">
+       <br />
+
+       <div class="center">
+        <span class="texth">Part D - Logic</span>
+        <br />
+        <br />
+        <span class="texthead">Lambda Expressions</span>
+        <br />
+        <br />
+        <span class="textagend">Workshop 5</span>
+       </div>
+       <br />
+       <br />
+
+       <p>In this workshop, you convert the grades earned by students in a course to
+       letter values using Seneca's grading scale.</p>
+       <br />
+
+       <p class="section">Learning Outcomes</p>
+
+       <p>Upon successful completion of this workshop, you will have demonstrated
+       the abilities to</p>
+
+       <ul>
+        <li>use a lambda expression to define an operation on a set of data values</li>
+        <li>prevent the copying, moving and assigning of an object</li>
+        <li>throw and report an exception</li>
+        <li>reflect on what you have learned in this workshop</li>
+       </ul>
+       <br />
+
+       <p class="section">Specifications</p>
+
+       <p>
+       This workshop reads a file containing student numbers and grades and converts the
+       grades to letter values using the following scale:
+       </p>
+       <table align=center cellpadding=3 border=1>
+        <tr>
+         <td>Grade Range
+         </td>
+         <td>Letter Grade
+         </td>
+        </tr>
+        <tr>
+         <td align=right>90-100
+         </td>
+         <td align=center>A+
+         </td>
+        </tr>
+        <tr>
+         <td align=right>80-89
+         </td>
+         <td align=center>A
+         </td>
+        </tr>
+        <tr>
+         <td align=right>75-79
+         </td>
+         <td align=center>B+
+         </td>
+        </tr>
+        <tr>
+         <td align=right>70-74
+         </td>
+         <td align=center>B
+         </td>
+        </tr>
+        <tr>
+         <td align=right>65-69
+         </td>
+         <td align=center>C+
+         </td>
+        </tr>
+        <tr>
+         <td align=right>60-64
+         </td>
+         <td align=center>C
+         </td>
+        </tr>
+        <tr>
+         <td align=right>55-59
+         </td>
+         <td align=center>D+
+         </td>
+        </tr>
+        <tr>
+         <td align=right>50-54
+         </td>
+         <td align=center>D
+         </td>
+        </tr>
+        <tr>
+         <td align=right>0-49
+         </td>
+         <td align=center>F
+         </td>
+        </tr>
+       </table>
+       <p>
+       Decimal values round to nearest integer.
+       </p>
+
+       <p class="ssection">Grades Class</p>
+
+       <p>
+       Design and code a class named <span class=code>Grades</span> that holds the grades
+       for all students in a course.&nbsp; Upon instantiation, a <span class=code>Grades</span>
+       object receives the address of a C-style null-terminated string that contains the
+       name of the file holding the grade information for all students in a course.&nbsp;
+       The object allocates memory dynamically and stores this information.&nbsp; Each file
+       record contains one student number and a grade, which may include a decimal value.&nbsp;
+       If the object cannot open the file, the constructor throws an exception with a suitable
+       message.&nbsp;
+       </p>
+       <p>
+       Your design includes the following member function:
+       </p>
+       <ul>
+       <li><span class=code>void displayGrades() const</span> - receives a reference to
+       the output stream object and the expression to be used in determining the letter
+       grade.&nbsp; Your function displays the student number, the student grade, and
+       the letter equivalent as shown below on the right.&nbsp;
+       </li>
+       </ul>
+       <p>
+       Your design prohibits copying, moving or assigning of a <span class=code>Grades</span>
+       object.
+       </p>
+       <p>
+       Store your design in a header file named <span class=code>Grades.h</span>.
+       </p>
+
+       <p class="ssection">Main Function</p>
+
+       <p>
+       The shell of the main function that uses your <span class=code>Grades</span> class
+       is listed below on the left.&nbsp; A file containing student information, which you
+       may use to test your code, is available <a href="w6.dat.html">here</a>.&nbsp;
+       </p>
+       <p>
+       Complete the coding of this main function by
+       </p>
+       <ul>
+       <li>defining the lambda expression (<span class=code>letter</span>) that converts
+       a numeric grade to its letter equivalent</li>
+       <li>adding the code to report an exception if any has been thrown</li>
+       </ul>
+       <table width="95%" summary="">
+        <tr>
+         <td>
+          <pre>
+ // Workshop 6 - Lambda Expression
+ // w6.cpp
+
+ #include &lt;iostream&gt;
+ #include "Grades.h"
+
+ int main(int argc, char* argv[]) {
+     if (argc != 2) {
+         std::cerr &lt;&lt; argv[0] &lt;&lt;
+          ": incorrect number of arguments\n";
+         std::cerr &lt;&lt; "Usage: " &lt;&lt; argv[0] &lt;&lt; " file_name\n";&nbsp;
+         return 1;
+     }
+
+
+         Grades grades(argv[1]);
+         <span class=high>// define the lambda expression for letter</span>
+
+
+
+
+
+         grades.displayGrades(std::cout, <span class=high>letter</span>);
+
+
+
+
+     std::cout &lt;&lt; "Press any key to continue ... ";
+     std::cin.get();
+ }</pre>
+         </td>
+         <td>
+          <pre class=result>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 1022342 67.40 C+
+ 1024567 73.50 B
+ 2031456 79.30 B+
+ 6032144 53.50 D
+ 1053250 92.10 A+
+ 3026721 86.50 A
+ 7420134 62.30 C
+ 9762314 58.70 D+&nbsp;
+ 6521045 34.60 F</pre>
+         </td>
+        </tr>
+       </table>
+
+       <br />
+
+       <p class="section">Submission</p>
+
+       <p>Follow your professor's submission instructions</p>
+       <br />
+       <br />
+       <br />
+      </td>
+     </tr>
+    </table>
+   </td>
+  </tr>
+ </table>
+</body>
+</html>

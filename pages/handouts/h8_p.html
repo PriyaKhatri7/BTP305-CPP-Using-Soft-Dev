@@ -1,0 +1,156 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC
+    '-//W3C//DTD XHTML 1.0 Transitional//EN'
+    'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html lang="en-us" xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+    <title>OO Software Development Using C++11 | ICT - Seneca</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' />
+
+    <meta name="Copyright" content="(c) Copyright Seneca College and Chris Szalwinski 2014" />
+    <meta name="Description" content="Welcome to the OOP345 Web Site.  On this site you can find an intermediate course on object-oriented programming in C++.  Designed by Chris Szalwinski." />
+    <meta name="Abstract" content="This subject expands on introductory elements of C++ and covers intermediate C features.  The emphasis throughout is to prepare for the solution of large problems."/>
+    <meta name="Author" content="chris.szalwinski@senecacollege.ca"/>
+    <meta name="Keywords" content="software development, object-oriented programming, lecture notes"/>
+
+    <link rel="stylesheet" type="text/css" href="../style.043.css">
+    <link rel="stylesheet" type="text/css" href="../styleSPrint.043.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="../stylePPrint.043.css" media="print">
+</head>
+
+<body>
+
+<table cellspacing="0" cellpadding="0" summary="">
+
+    <!-- Body Cell -->
+    <tr class="content">
+        <!-- Content Area -->
+        <td class="tbody" bgcolor="ffffff">
+    <table cellpadding="10" width="100%" summary="">
+     <tr>
+      <td class="content" valign="top">
+       <br />
+
+       <div class="center">
+        <span class="texth">In-Class Practice</span>
+        <br />
+        <br />
+        <span class="texthead">Data Representation - IEEE 754
+        <br />
+        Single-Precision
+        <br />
+        Floating Point Numbers</span>
+       </div>
+       <br />
+       <br />
+       <br />
+
+       <p>To obtain the IEEE 754 representation of a single-precision
+       floating point number:&#160;</p>
+
+       <ul>
+        <li>Set the sign bit to 0 if the number is positive, 1 if the
+        number is negative.&#160;</li>
+
+        <li>Determine the storable portion of the mantissa
+
+         <ul>
+          <li>Calculate the fractional binary of the absolute value of
+          the number:
+
+           <ul>
+            <li>Find n the largest power of 2, where 2<sup>n</sup>
+            divides into the number at least once</li>
+
+            <li>Subtract 2<sup>n</sup> from the number and retain the
+            remainder</li>
+
+            <li>Reduce n by 1 and if the remainder is divisible by
+            2<sup>n</sup>, set the next bit to 1 and subtract
+            2<sup>n</sup> to obtain a new remainder.&#160; If not
+            divisible, set the next bit to 0</li>
+
+            <li>repeat the preceding step until either the remainder
+            vanishes or there are no more significant bits left to
+            fill.</li>
+           </ul>
+          </li>
+
+          <li>convert the fractionary binary to exponent form using
+          powers of 2 (for example, 1.0111011 * 2<sup>e</sup>) by
+          shifting the decimal point immediately after the most
+          significant bit</li>
+
+          <li>discard the most significant bit to obtain the storable
+          portion of the mantissa</li>
+         </ul>
+        </li>
+
+        <li>Determine the storable exponent
+
+         <ul>
+          <li>Add 127 to the exponent e</li>
+
+          <li>Convert the result to binary for the storable
+          exponent</li>
+         </ul>
+        </li>
+
+        <li>Assemble the sign bit, the storable exponent and the
+        storable mantissa to form the complete binary</li>
+       </ul>
+
+       <p>Example: 22.5</p>
+       <pre class="defin">
+ Sign bit is 0
+ Determine the storable portion of the mantissa:
+  Determine the fractional binary:
+   Find the largest power of 2 where 2 to that power divides into 22.5 at least once: 4
+   16  1  22.5 - 16 = 6.5
+    8  0
+    4  1  6.5 - 4 = 2.5
+    2  1  2.5 - 2 = 0.5
+    1  0
+   .5  1  0.5 - 0.5 = 0
+   So the fractional binary is 10110.1
+   or                          1.01101 x 2<sup>4</sup>
+ Drop the leading 1 to obtain the storable mantissa 01101
+Determine the storable exponent:
+ Add 127 to the exponent = 4 + 127 = 131
+ In binary, 131 is 10000011
+Assemble the components:
+ 0 10000011 01101000000000000000000
+</pre>
+      </td>
+     </tr>
+    </table>
+        </td>
+    </tr>
+
+    <!-- Footer -->
+    <tr>
+        <td class="tbody">
+            <table cellpadding="1" width="90%" align="center">
+                <tr>
+                    <td width="50%" class="text3">
+                        <script language="javascript">
+                        var lh = document.location.href;
+                        document.write(lh)
+                        </script>&nbsp;&nbsp;
+                    </td>
+                    <td width="50%" align="right" class="text3">
+                        <script language="javascript">
+                        var lm = document.lastModified.slice(0,-3);
+                        document.write("Last Modified: " +lm)
+                        </script>&nbsp;&nbsp;
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>
